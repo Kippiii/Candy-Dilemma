@@ -19,18 +19,25 @@ var player1Decision, player2Decision
 
 io.sockets.on('connection', function(socket) {
 	socket.on('disconnect', function() {
+		var person = ""
 		if(socket == hostSocket) {
 			gameHosted = false
 			hostSocket = null
 			player1Socket = null
 			player2Socket = null
+			person = "The host"
 		}else if(socket == player1Socket) {
 			player1Socket = null
+			playerUpdate()
+			person = "Player 1"
 			playerUpdate()
 		}else if(socket == player2Socket) {
 			player2Socket = null
 			playerUpdate()
+			person = "Player 2"
+			playerUpdate()
 		}
+		console.log(person + " has disconnected!")
 	})
 	
 	if(gameHosted) {
