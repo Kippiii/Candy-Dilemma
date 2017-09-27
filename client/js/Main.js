@@ -62,7 +62,7 @@ socket.on('hostStart', function() {
 	Candy.queue.push(new Candy("client/img/candy4.png", {x: 2 * (width / 5), y: 7 * (height / 10)}, canvasContext))
 	Candy.queue.push(new Candy("client/img/candy2.png", {x: width / 2, y: 1 * (height / 10)}, canvasContext))
 	Candy.queue.push(new Candy("client/img/candy4.png", {x: width / 2, y: 3 * (height / 10)}, canvasContext))
-	Candy.queue.push(new Candy("client/img/candy5.jpg", {x: width / 2, y: 5 * (height / 10)}, canvasContext))
+	Candy.queue.push(new Candy("client/img/candy5.png", {x: width / 2, y: 5 * (height / 10)}, canvasContext))
 	Candy.queue.push(new Candy("client/img/candy.png", {x: width / 2, y: 7 * (height / 10)}, canvasContext))
 })
 
@@ -190,8 +190,21 @@ function candyMove(FPS, seconds) {
 	}, 1000 / FPS)
 }
 
+function drawBackground() {
+	var image = new Image()
+	var size = width / 5
+	image.src = "client/img/background.jpg"
+	for(var y = 0; y < height; y+=size) {
+		for(var x = 0; x < width; x+=size) {
+			canvasContext.drawImage(image, x, y, size, size)
+		}
+	}
+}
+
 function draw() {
-	colorRect(0, 0, canvas.width, canvas.height, 'white');
+	drawBackground()
+	colorRect(0, 0, 3 * (width / 20), height / 10, 'white')
+	colorRect(17 * (width / 20), 0, 3 * (width / 20), height / 10, 'white')
 	colorText("Player 1", 0.02, 0.05, "black", "40px Comic Sans");
 	colorText("Player 2", 0.88, 0.05, "black", "40px Comic Sans");
 	
