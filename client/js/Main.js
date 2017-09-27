@@ -101,14 +101,14 @@ socket.on('startEndGame', function(data) {
 				if(decision2 == "Share") {
 					for(var i = 0; i < Candy.list.length; i++) {
 						var candy = Candy.list[i]
-						var x = candy.location.x == (3 * (width / 10)) ? width / 10 : 9 * (width / 10) - 132.4 - 25
+						var x = candy.location.x == (3 * (width / 10)) ? width / 5 : 4 * (width / 5) - 132.4
 						var y = candy.location.y
 						candy.setupMove({x: x, y: y}, 30)
 					}
 				}else{
 					for(var i = 0; i < Candy.list.length; i++) {
 						var candy = Candy.list[i]
-						var x = candy.location.x == (3 * (width / 10)) ? 8 * (width / 10) - 132.4 - 25 : 9 * (width / 10) - 132.4 - 25
+						var x = candy.location.x == (3 * (width / 10)) ? 7 * (width / 10) - 132.4 : 4 * (width / 5) - 132.4
 						var y = candy.location.y
 						candy.setupMove({x: x, y: y}, 30)
 					}
@@ -125,7 +125,7 @@ socket.on('startEndGame', function(data) {
 					for(var i = 0; i < Candy.list.length; i++) {
 						var candy = Candy.list[i]
 						if(candy.location.y == height / 10) {
-							var x = candy.location.x == (3 * (width / 10)) ? width / 10 : 9 * (width / 10) - 132.4 - 25
+							var x = candy.location.x == (3 * (width / 10)) ? width / 5 : 4 * (width / 5) - 132.4
 							var y = candy.location.y
 							candy.setupMove({x: x, y: y}, 30)
 						}else{
