@@ -1,3 +1,4 @@
+//Client variables
 var socket = io()
 var canvas, canvasContext;
 var width, height;
@@ -8,6 +9,7 @@ var decision1, decision2;
 
 const FPS = 30;
 
+//Sets up the canvas and game
 window.onload = function() {
 	canvas = document.getElementById('hostCanvas');
 	canvasContext = canvas.getContext('2d');
@@ -27,6 +29,7 @@ window.onload = function() {
 	$("#player").hide();
 }
 
+//Starts game when key is pressed
 document.onkeydown = function(event) {
 	if(player1.ready && player2.ready && !gameStarted)
 		socket.emit('startGame')
@@ -34,12 +37,14 @@ document.onkeydown = function(event) {
 		socket.emit('startGame')
 }
 
+//Is ran when a player connects to the server
 socket.on('onJoin', function(data) {
 	$button = $("#join .container .btn")
 	$button.html(data.button)
 	$button.click(function () {joinSocket(data.socket)})
 })
 
+//Is ran for the host when a player leaves or joins
 socket.on('playerUpdate', function(data) {
 	player1.ready = data.player1.ready;
 	player2.ready = data.player2.ready;
@@ -50,6 +55,7 @@ socket.on('playerUpdate', function(data) {
 	draw();
 })
 
+//Is ran for the host when the game begins
 socket.on('hostStart', function() {
 	Candy.list = []
 	decision1 = null
@@ -66,11 +72,13 @@ socket.on('hostStart', function() {
 	Candy.queue.push(new Candy("client/img/candy.png", {x: width / 2, y: 7 * (height / 10)}, canvasContext))
 })
 
+//Is ran for the players when the game begins
 socket.on('playerStart', function() {
 	$('#player .container').html('<button type="button" class="btn btn-primary btn-lg btn-block" style="background-color: green" onclick="share()">Share the Candy</button>');
 	$('#player .container').append('<button type="button" class="btn btn-primary btn-lg btn-block" style="background-color: red" onclick="steal()">Steal the Candy</button>');
 })
 
+//Is ran for the host when the players have both picked their choices
 socket.on('startEndGame', function(data) {
 	setTimeout(function() {
 		decision1 = data.player1Decision
@@ -142,6 +150,7 @@ socket.on('startEndGame', function(data) {
 	}, 1000 * 2)
 })
 
+//Is ran for the players when the game is fully over
 socket.on('candy', function(candy) {
 	if(candy >= 4)
 		color = "green"
@@ -150,6 +159,7 @@ socket.on('candy', function(candy) {
 	$('#player .container').html("<h2 style='color: " + color + "'>You get " + candy + " piece(s) of candy</h2>")
 })
 
+//Sets up the game depending on if you are a host or a player
 function joinSocket(theSocket) {
 	socket.emit(theSocket)
 	if(theSocket == "hostGame") {
@@ -162,16 +172,19 @@ function joinSocket(theSocket) {
 	}
 }
 
+//Is ran when a player chooses to share
 function share() {
 	socket.emit('decision', "Share")
 	$('#player .container').html("<h2 style='color: green'>You chose to share the candy!</h2>")
 }
 
+//Is ran when a player chooses to steal
 function steal() {
 	socket.emit('decision', "Steal")
 	$('#player .container').html("<h2 style='color: red'>You chose to steal the candy!</h2>")
 }
 
+//Moves all of the candy objects over a period of time
 function candyMove(FPS, seconds) {
 	var frames = FPS * seconds
 	var counter = 0
@@ -190,6 +203,7 @@ function candyMove(FPS, seconds) {
 	}, 1000 / FPS)
 }
 
+//Draws the background of the canvas
 function drawBackground() {
 	var image = new Image()
 	var size = width / 5
@@ -201,6 +215,7 @@ function drawBackground() {
 	}
 }
 
+//Draws everything needed on the canvas
 function draw() {
 	drawBackground()
 	colorRect(0, 0, 3 * (width / 20), height / 10, 'white')

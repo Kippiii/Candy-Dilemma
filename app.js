@@ -1,3 +1,4 @@
+//Basic Node.js setup
 var express = require('express'); 
 var app = express(); 
 var serv = require('http').Server(app); 
@@ -17,7 +18,9 @@ var gameHosted = false
 var hostSocket, player1Socket, player2Socket
 var player1Decision, player2Decision
 
+//Is ran when a client connects to the server
 io.sockets.on('connection', function(socket) {
+	//Is ran when someone disconnects from the server
 	socket.on('disconnect', function() {
 		var person = ""
 		if(socket == hostSocket) {
@@ -40,6 +43,7 @@ io.sockets.on('connection', function(socket) {
 		console.log(person + " has disconnected!")
 	})
 	
+	//Decides whether client will be a host or a player
 	if(gameHosted) {
 		socket.emit('onJoin', {
 			button: "Join Game",
@@ -52,6 +56,7 @@ io.sockets.on('connection', function(socket) {
 		})
 	}
 	
+	//Is ran when a game is hosted
 	socket.on('hostGame', function() {
 		if(!gameHosted) {
 			hostSocket = socket
@@ -60,6 +65,7 @@ io.sockets.on('connection', function(socket) {
 		}
 	})
 	
+	//Is ran when a player joins the game
 	socket.on('joinGame', function() {
 		if(gameHosted) {
 			if(player1Socket != null)
@@ -72,6 +78,7 @@ io.sockets.on('connection', function(socket) {
 		}
 	})
 	
+	//Is ran when the game is started by the host
 	socket.on('startGame', function() {
 		if(socket == hostSocket) {
 			hostSocket.emit('hostStart')
@@ -81,6 +88,7 @@ io.sockets.on('connection', function(socket) {
 		}
 	})
 	
+	//Is ran when a player chooses either share or steal
 	socket.on('decision', function(decision) {
 		if(socket == player1Socket)
 			player1Decision = decision
@@ -93,6 +101,7 @@ io.sockets.on('connection', function(socket) {
 			})
 	})
 	
+	//Is ran at the very end of the game
 	socket.on('endGame', function() {
 		candy1 = 0, candy2 = 0
 		if(player1Decision == "Share") {
@@ -119,6 +128,7 @@ io.sockets.on('connection', function(socket) {
 	})
 })
 
+//Is ran everytime a player joins or leaves
 function playerUpdate() {
 	hostSocket.emit('playerUpdate', {
 		player1: {ready: player1Socket != null},
