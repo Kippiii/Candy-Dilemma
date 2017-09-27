@@ -1,15 +1,20 @@
 {
   "name": "clubexpocandy",
   "version": "1.0.0",
-  "description": "",
+  "description": "Creates a moral dilemma related to candy!",
   "main": "app.js",
+  "dependencies": {
+	"express": "^4.13.4",
+	"socket.io": "^1.4.5"
+  },
+  "engines": {
+	"node": "4.6.0"
+  },
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+	"start": "node app.js"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.15.4",
-    "socket.io": "^2.0.3"
-  }
+  "license": "ISC"
+}
 }
