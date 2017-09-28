@@ -125,7 +125,7 @@ socket.on('startEndGame', function(data) {
 				if(decision2 == "Share") {
 					for(var i = 0; i < Candy.list.length; i++) {
 						var candy = Candy.list[i]
-						var x = candy.location.x == (3 * (width / 10)) ? width / 10 : 2 * (width / 10)
+						var x = candy.location.x == (3 * (width / 10)) ? width / 5 : 3 * (width / 10)
 						var y = candy.location.y
 						candy.setupMove({x: x, y: y}, 30)
 					}
@@ -218,8 +218,8 @@ function drawBackground() {
 //Draws everything needed on the canvas
 function draw() {
 	drawBackground()
-	colorRect(0, 0, 3 * (width / 20), height / 10, 'white')
-	colorRect(17 * (width / 20), 0, 3 * (width / 20), height / 10, 'white')
+	colorRect(0, 0, 3 * (width / 20), height / 10, 'pink')
+	colorRect(17 * (width / 20), 0, 3 * (width / 20), height / 10, 'pink')
 	colorText("Player 1", 0.02, 0.05, "black", "40px Comic Sans");
 	colorText("Player 2", 0.88, 0.05, "black", "40px Comic Sans");
 	
@@ -235,15 +235,13 @@ function draw() {
 		if(player1.ready && player2.ready)
 			colorText("Press a button to start the game!", 0.32, 0.5, "black", "40px Comic Sans")
 	}else{
-		for(var i = 0; i < Candy.list.length; i++) {
-			Candy.list[i].draw()
-		}
 		if(decision1 != null) {
 			var color
 			if(decision1 == "Share")
 				color = 'green'
 			else
 				color = 'red'
+			colorRect(0, height / 10, 3 * (width / 20), height / 10, 'pink')
 			colorText(decision1, 0.02, 0.15, color, "40px Comic Sans");
 		}
 		if(decision2 != null) {
@@ -252,7 +250,11 @@ function draw() {
 				color = 'green'
 			else
 				color = 'red'
+			colorRect(17 * (width / 20), height / 10, 3 * (width / 20), height / 10, 'pink')
 			colorText(decision2, 0.88, 0.15, color, "40px Comic Sans");
+		}
+		for(var i = 0; i < Candy.list.length; i++) {
+			Candy.list[i].draw()
 		}
 		if(newGame) {
 			colorText("Press a button to start the game!", 0.32, 0.5, "black", "40px Comic Sans")
