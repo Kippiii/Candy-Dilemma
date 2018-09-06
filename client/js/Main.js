@@ -6,6 +6,7 @@ var player1 = Player(), player2 = Player();
 var gameStarted = false;
 var newGame = false
 var decision1, decision2;
+var shares = 0, steals = 0
 
 const FPS = 30;
 
@@ -146,6 +147,8 @@ socket.on('startEndGame', function(data) {
 			candyMove(30, 1)
 			socket.emit('endGame')
 			newGame = true
+			decision1 == "Share" ? shares += 1 : steals += 1
+			decision2 == "Share" ? shares += 1 : steals += 1
 		}, 1000 * 3)
 	}, 1000 * 2)
 })
@@ -215,26 +218,51 @@ function drawBackground() {
 	}
 }
 
+//Draws the graph showing selection statistics
+function drawGraph(graphX, graphY, graphWidth, graphHeight) {
+	var thickness = 2.5
+	hollowRect(graphX, graphY, graphWidth, graphHeight, "Black", String(thickness * 2))
+	colorRect(graphX + thickness, graphY + thickness, graphWidth - (2 * thickness), graphHeight - (2 * thickness), "White")
+
+	var sharePercent, stealPercent
+	try {
+		sharePercent = Math.round(shares / (shares + steals) * 100 * 100) / 100
+		stealPercent = Math.round(steals / (shares + steals) * 100 * 100) / 100
+	}catch(err) {
+		sharePercent = 0
+		stealPercent = 0
+	}
+	
+	var barThickness = graphHeight / 4
+	var blankSpace = ((graphHeight - 2 * thickness) - (2 * barThickness)) / 3
+	colorText("Steal - " + stealPercent + "%", graphX + thickness + 20, graphY + thickness + blankSpace - 10, "red", "40px Comic Sans")
+	colorRect(graphX + thickness, graphY + thickness + blankSpace, (graphWidth - (2 * thickness)) * (stealPercent / 100), barThickness, "Red")
+	colorText("Share - " + sharePercent + "%", graphX + thickness + 20, graphY + thickness + (2 * blankSpace) + barThickness - 10, "green", "40px Comic Sans")
+	colorRect(graphX + thickness , graphY + thickness + (2 * blankSpace) + barThickness, (graphWidth - (2 * thickness)) * (sharePercent / 100), barThickness, "Green")
+}
+
 //Draws everything needed on the canvas
 function draw() {
 	drawBackground()
 	colorRect(0, 0, 3 * (width / 20), height / 10, 'pink')
 	colorRect(17 * (width / 20), 0, 3 * (width / 20), height / 10, 'pink')
-	colorText("Player 1", 0.02, 0.05, "black", "40px Comic Sans");
-	colorText("Player 2", 0.88, 0.05, "black", "40px Comic Sans");
+	colorText("Player 1", 0.02 * width, 0.05 * height, "black", "40px Comic Sans");
+	colorText("Player 2", 0.88 * width, 0.05 * height, "black", "40px Comic Sans");
 	
 	if(!gameStarted) {
 		if(player1.ready)
-			colorText("Ready", 0.02, 0.09, "green", "20px Comic Sans");
+			colorText("Ready", 0.02 * width, 0.09 * height, "green", "20px Comic Sans");
 		else
-			colorText("Not Ready", 0.02, 0.09, "red", "20px Comic Sans");
+			colorText("Not Ready", 0.02 * width, 0.09 * height, "red", "20px Comic Sans");
 		if(player2.ready)
-			colorText("Ready", 0.88, 0.09, "green", "20px Comic Sans");
+			colorText("Ready", 0.88 * width, 0.09 * height, "green", "20px Comic Sans");
 		else
-			colorText("Not Ready", 0.88, 0.09, "red", "20px Comic Sans");
+			colorText("Not Ready", 0.88 * width, 0.09 * height, "red", "20px Comic Sans");
 		if(player1.ready && player2.ready)
-			colorText("Press a button to start the game!", 0.32, 0.5, "black", "40px Comic Sans")
+			colorText("Press a button to start the game!", 0.32 * width, 0.2 * height, "black", "40px Comic Sans")
+		drawGraph(2 * (width / 6), (height - (width / 5)) / 2, width / 3, width / 5)
 	}else{
+		if(decision1 == null && decision2 == null) drawGraph(width / 18, (height - (width / 5)) / 2, width / 3, width / 5)
 		if(decision1 != null) {
 			var color
 			if(decision1 == "Share")
@@ -242,7 +270,7 @@ function draw() {
 			else
 				color = 'red'
 			colorRect(0, height / 10, 3 * (width / 20), height / 10, 'pink')
-			colorText(decision1, 0.02, 0.15, color, "40px Comic Sans");
+			colorText(decision1, 0.02 * width, 0.15 * height, color, "40px Comic Sans");
 		}
 		if(decision2 != null) {
 			var color
@@ -251,13 +279,14 @@ function draw() {
 			else
 				color = 'red'
 			colorRect(17 * (width / 20), height / 10, 3 * (width / 20), height / 10, 'pink')
-			colorText(decision2, 0.88, 0.15, color, "40px Comic Sans");
+			colorText(decision2, 0.88 * width, 0.15 * height, color, "40px Comic Sans");
 		}
 		for(var i = 0; i < Candy.list.length; i++) {
 			Candy.list[i].draw()
 		}
 		if(newGame) {
-			colorText("Press a button to start the game!", 0.32, 0.5, "black", "40px Comic Sans")
+			decision1 == decision2 ? drawGraph(2 * (width / 6), (height - (width / 5)) / 2, width / 3, width / 5) : decision1 == "Steal" ? drawGraph(width / 2, (height - (width / 5)) / 2, width / 3, width / 5) : drawGraph(width / 6, (height - (width / 5)) / 2, width / 3, width / 5)
+			colorText("Press a button to start the game!", 0.32 * width, 0.2 * height, "black", "40px Comic Sans")
 		}
 	}
 }
@@ -268,9 +297,18 @@ function colorRect(leftX, topY, width, height, drawColor) {
 	canvasContext.fillRect(leftX, topY, width, height);
 }
 
+//Used for created hollow rectangles
+function hollowRect(leftX, topY, width, height, drawColor, thickness) {
+	canvasContext.beginPath()
+	canvasContext.lineWidth = thickness
+	canvasContext.strokeStyle = drawColor
+	canvasContext.rect(leftX, topY, width, height)
+	canvasContext.stroke()
+}
+
 //Used for coloring text
 function colorText(text, x, y, color, font) {
 	canvasContext.fillStyle = color;
 	canvasContext.font = font;
-	canvasContext.fillText(text, x * width, y * height);
+	canvasContext.fillText(text, x, y);
 }
