@@ -1,11 +1,10 @@
 {
  "name": "clubexpocandy",
- "version": "1.0.0",
+ "version": "1.2.0",
  "description": "Creates a moral dilemma related to candy!",
  "main": "app.js",
  "dependencies": {
   "express": "^4.13.4",
-  "mysql": "^2.16.0",
   "socket.io": "^1.4.5"
  },
  "engines": {
