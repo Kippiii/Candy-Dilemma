@@ -63,14 +63,14 @@ socket.on('hostStart', function() {
 	decision2 = null
 	gameStarted = true
 	newGame = false
-	Candy.queue.push(new Candy("client/img/candy.png", {x: 2 * (width / 5), y: height / 10}, canvasContext))
-	Candy.queue.push(new Candy("client/img/candy2.png", {x: 2 * (width / 5), y: 3 * (height / 10)}, canvasContext))
-	Candy.queue.push(new Candy("client/img/candy3.png", {x: 2 * (width / 5), y: 5 * (height / 10)}, canvasContext))
-	Candy.queue.push(new Candy("client/img/candy4.png", {x: 2 * (width / 5), y: 7 * (height / 10)}, canvasContext))
-	Candy.queue.push(new Candy("client/img/candy2.png", {x: width / 2, y: 1 * (height / 10)}, canvasContext))
-	Candy.queue.push(new Candy("client/img/candy4.png", {x: width / 2, y: 3 * (height / 10)}, canvasContext))
-	Candy.queue.push(new Candy("client/img/candy5.png", {x: width / 2, y: 5 * (height / 10)}, canvasContext))
-	Candy.queue.push(new Candy("client/img/candy.png", {x: width / 2, y: 7 * (height / 10)}, canvasContext))
+	//Candy.queue.push(new Candy("client/img/candy3.png", {x: 2 * (width / 5), y: height / 10}, canvasContext))
+	Candy.queue.push(new Candy("client/img/candy2.png", {x: 2 * (width / 5), y: 2 * (height / 10)}, canvasContext))
+	Candy.queue.push(new Candy("client/img/candy.png", {x: 2 * (width / 5), y: 4 * (height / 10)}, canvasContext))
+	Candy.queue.push(new Candy("client/img/candy4.png", {x: 2 * (width / 5), y: 6 * (height / 10)}, canvasContext))
+	//Candy.queue.push(new Candy("client/img/candy5.png", {x: width / 2, y: 1 * (height / 10)}, canvasContext))
+	Candy.queue.push(new Candy("client/img/candy2.png", {x: width / 2, y: 2 * (height / 10)}, canvasContext))
+	Candy.queue.push(new Candy("client/img/candy.png", {x: width / 2, y: 4 * (height / 10)}, canvasContext))
+	Candy.queue.push(new Candy("client/img/candy4.png", {x: width / 2, y: 6 * (height / 10)}, canvasContext))
 })
 
 //Is ran for the players when the game begins
@@ -133,7 +133,7 @@ socket.on('startEndGame', function(data) {
 				}else{
 					for(var i = 0; i < Candy.list.length; i++) {
 						var candy = Candy.list[i]
-						if(candy.location.y == height / 10) {
+						if(candy.location.y == 2 * (height / 10)) {
 							var x = candy.location.x == (3 * (width / 10)) ? width / 5 : 4 * (width / 5) - 132.4
 							var y = candy.location.y
 							candy.setupMove({x: x, y: y}, 30)
@@ -155,7 +155,7 @@ socket.on('startEndGame', function(data) {
 
 //Is ran for the players when the game is fully over
 socket.on('candy', function(candy) {
-	if(candy >= 4)
+	if(candy >= 3)
 		color = "green"
 	else
 		color = "red"

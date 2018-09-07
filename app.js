@@ -107,17 +107,17 @@ io.sockets.on('connection', function(socket) {
 		if(player1Decision == "Share") {
 			if(player2Decision == "Steal") {
 				candy1 = 0
-				candy2 = 8
+				candy2 = 6
 			}else{
-				candy1 = 4
-				candy2 = 4
+				candy1 = 3
+				candy2 = 3
 			}
 		}else{
 			if(player2Decision == "Steal") {
 				candy1 = 1
 				candy2 = 1
 			}else{
-				candy1 = 8
+				candy1 = 6
 				candy2 = 0
 			}
 		}
