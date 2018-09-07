@@ -225,10 +225,10 @@ function drawGraph(graphX, graphY, graphWidth, graphHeight) {
 	colorRect(graphX + thickness, graphY + thickness, graphWidth - (2 * thickness), graphHeight - (2 * thickness), "White")
 
 	var sharePercent, stealPercent
-	try {
+	if(shares + steals != 0) {
 		sharePercent = Math.round(shares / (shares + steals) * 100 * 100) / 100
 		stealPercent = Math.round(steals / (shares + steals) * 100 * 100) / 100
-	}catch(err) {
+	}else{
 		sharePercent = 0
 		stealPercent = 0
 	}
@@ -258,8 +258,10 @@ function draw() {
 			colorText("Ready", 0.88 * width, 0.09 * height, "green", "20px Comic Sans");
 		else
 			colorText("Not Ready", 0.88 * width, 0.09 * height, "red", "20px Comic Sans");
-		if(player1.ready && player2.ready)
+		if(player1.ready && player2.ready) {
+			colorRect(0.32 * width, 0.15 * height, 0.37 * width, 0.07 * height, "pink")
 			colorText("Press a button to start the game!", 0.32 * width, 0.2 * height, "black", "40px Comic Sans")
+		}
 		drawGraph(2 * (width / 6), (height - (width / 5)) / 2, width / 3, width / 5)
 	}else{
 		if(decision1 == null && decision2 == null) drawGraph(width / 18, (height - (width / 5)) / 2, width / 3, width / 5)
@@ -286,6 +288,7 @@ function draw() {
 		}
 		if(newGame) {
 			decision1 == decision2 ? drawGraph(2 * (width / 6), (height - (width / 5)) / 2, width / 3, width / 5) : decision1 == "Steal" ? drawGraph(width / 2, (height - (width / 5)) / 2, width / 3, width / 5) : drawGraph(width / 6, (height - (width / 5)) / 2, width / 3, width / 5)
+			colorRect(0.32 * width, 0.15 * height, 0.37 * width, 0.07 * height, "pink")
 			colorText("Press a button to start the game!", 0.32 * width, 0.2 * height, "black", "40px Comic Sans")
 		}
 	}
